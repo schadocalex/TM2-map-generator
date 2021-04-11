@@ -20,13 +20,29 @@ const dirToRad = dir => {
   return dir * (-Math.PI / 2);
 };
 
+const colorSelector = data => {
+  switch (data) {
+    case 'free':
+      return 0x1bb500;
+    case 'red_right':
+      return 0xbd0000;
+    case 'red_left':
+      return 0xff5959;
+    case 'jump':
+      return 0x0040ff;
+
+    default:
+      return 0xffffff;
+  }
+};
+
 let i = 0;
 
 data.blocks.forEach(bloc => {
   // Inputs
   bloc.inputs.forEach(input => {
     const geometry = new THREE.ConeGeometry(0.5, 1, 16);
-    const material = new THREE.MeshBasicMaterial({ color: 0x32cd32, wireframe: true });
+    const material = new THREE.MeshBasicMaterial({ color: colorSelector(input.tag), wireframe: true });
     const cone = new THREE.Mesh(geometry, material);
     geometry.rotateX(-Math.PI / 2);
     geometry.rotateY(dirToRad(input.pose.dir));
@@ -37,7 +53,7 @@ data.blocks.forEach(bloc => {
   // Outputs
   bloc.outputs.forEach(input => {
     const geometry = new THREE.ConeGeometry(0.5, 1, 16);
-    const material = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
+    const material = new THREE.MeshBasicMaterial({ color: colorSelector(input.tag), wireframe: true });
     const cone = new THREE.Mesh(geometry, material);
     geometry.rotateX(-Math.PI / 2);
     geometry.rotateY(dirToRad(input.pose.dir));
