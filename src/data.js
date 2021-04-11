@@ -18,6 +18,10 @@ const TAG = {
   RED_LEFT: 'red_left',
   JUMP: 'jump'
 };
+const OFFICIALS_TAGS = {
+  [TAG.RED_RIGHT]: { invert: TAG.RED_LEFT },
+  [TAG.RED_LEFT]: { invert: TAG.RED_RIGHT }
+};
 
 const TYPE = {
   ROAD: 'road',
@@ -70,12 +74,12 @@ const block_111 = keys => {
       {
         pose: new Pose(0, 0, 0, DIR.EAST),
         tag: TAG.RED_LEFT,
-        group: '1'
+        output: true
       },
       {
         pose: new Pose(0, 0, 0, DIR.WEST),
         tag: TAG.RED_RIGHT,
-        group: '2'
+        output: true
       },
       {
         pose: new Pose(0, 0, 0, DIR.NORTH),
@@ -129,12 +133,12 @@ const data = {
         {
           pose: new Pose(0, 0, 0, DIR.EAST),
           tag: TAG.RED_LEFT,
-          group: '1'
+          output: true
         },
         {
           pose: new Pose(0, 0, 0, DIR.WEST),
           tag: TAG.RED_RIGHT,
-          group: '2'
+          output: true
         },
         {
           pose: new Pose(0, 0, 0, DIR.NORTH),
@@ -142,16 +146,6 @@ const data = {
         }
       ],
       outputs: [
-        {
-          pose: new Pose(-1, 0, 0, DIR.EAST),
-          tag: TAG.RED_LEFT,
-          group: '1'
-        },
-        {
-          pose: new Pose(1, 0, 0, DIR.WEST),
-          tag: TAG.RED_RIGHT,
-          group: '2'
-        },
         {
           pose: new Pose(0, 0, -1, DIR.SOUTH),
           tag: TAG.JUMP,
@@ -179,26 +173,15 @@ const data = {
         {
           pose: new Pose(0, 0, 0, DIR.WEST),
           tag: TAG.RED_LEFT,
-          group: '1'
+          output: true
         },
         {
           pose: new Pose(0, 0, 0, DIR.EAST),
           tag: TAG.RED_LEFT,
-          group: '2'
+          output: true
         }
       ],
-      outputs: [
-        {
-          pose: new Pose(1, 0, 0, DIR.WEST),
-          tag: TAG.RED_RIGHT,
-          group: '1'
-        },
-        {
-          pose: new Pose(-1, 0, 0, DIR.EAST),
-          tag: TAG.RED_RIGHT,
-          group: '2'
-        }
-      ]
+      outputs: []
     },
     {
       keys: [1, 1, 7],
@@ -208,26 +191,15 @@ const data = {
         {
           pose: new Pose(0, 0, 0, DIR.WEST),
           tag: TAG.RED_RIGHT,
-          group: '1'
+          output: true
         },
         {
           pose: new Pose(0, 0, 0, DIR.EAST),
           tag: TAG.RED_RIGHT,
-          group: '2'
+          output: true
         }
       ],
-      outputs: [
-        {
-          pose: new Pose(1, 0, 0, DIR.WEST),
-          tag: TAG.RED_LEFT,
-          group: '1'
-        },
-        {
-          pose: new Pose(-1, 0, 0, DIR.EAST),
-          tag: TAG.RED_LEFT,
-          group: '2'
-        }
-      ]
+      outputs: []
     },
     {
       keys: [1, 3, 3],
@@ -293,26 +265,15 @@ const data = {
         {
           pose: new Pose(0, 0, 0, DIR.x),
           tag: TAG.RED_LEFT,
-          group: '1'
+          output: true
         },
         {
           pose: new Pose(0, 0, 0, DIR.WEST),
           tag: TAG.RED_RIGHT,
-          group: '2'
+          output: true
         }
       ],
-      outputs: [
-        {
-          pose: new Pose(-1, 0, 0, DIR.EAST),
-          tag: TAG.RED_LEFT,
-          group: '1'
-        },
-        {
-          pose: new Pose(0, 0, -1, DIR.SOUTH),
-          tag: TAG.RED_RIGHT,
-          group: '2'
-        }
-      ]
+      outputs: []
     },
     {
       keys: [1, 2, 2],
@@ -322,26 +283,15 @@ const data = {
         {
           pose: new Pose(0, 0, 0, DIR.NORTH),
           tag: TAG.RED_LEFT,
-          group: '1'
+          output: true
         },
         {
           pose: new Pose(0, 0, 0, DIR.WEST),
           tag: TAG.RED_RIGHT,
-          group: '2'
+          output: true
         }
       ],
-      outputs: [
-        {
-          pose: new Pose(-1, 0, 0, DIR.EAST),
-          tag: TAG.RED_LEFT,
-          group: '1'
-        },
-        {
-          pose: new Pose(0, 0, -1, DIR.SOUTH),
-          tag: TAG.RED_RIGHT,
-          group: '2'
-        }
-      ]
+      outputs: []
     },
     {
       keys: [1, 2, 3],
@@ -351,12 +301,12 @@ const data = {
         {
           pose: new Pose(0, 0, 0, DIR.WEST),
           tag: TAG.RED_RIGHT,
-          group: '1'
+          output: true
         },
         {
           pose: new Pose(0, 0, 0, DIR.SOUTH),
           tag: TAG.RED_LEFT,
-          group: '2'
+          output: true
         },
         {
           pose: new Pose(0, 0, 0, DIR.NORTH),
@@ -367,18 +317,7 @@ const data = {
           tag: TAG.JUMP
         }
       ],
-      outputs: [
-        {
-          pose: new Pose(-1, 0, 0, DIR.EAST),
-          tag: TAG.RED_LEFT,
-          group: '2'
-        },
-        {
-          pose: new Pose(0, 0, 1, DIR.NORTH),
-          tag: TAG.RED_RIGHT,
-          group: '1'
-        }
-      ]
+      outputs: []
     },
     // {
     //   keys: [1, 2, 4], // QA //
@@ -388,26 +327,15 @@ const data = {
     //     {
     //       pose: new Pose(0, 0, 0, DIR.NORTH),
     //       tag: TAG.RED_RIGHT,
-    //       group: '1'
+    //       output: true
     //     },
     //     {
     //       pose: new Pose(1, 0, 1, DIR.EAST),
     //       tag: TAG.RED_LEFT,
-    //       group: '2'
+    //       output: true
     //     }
     //   ],
-    //   outputs: [
-    //     {
-    //       pose: new Pose(2, 0, 1, DIR.WEST),
-    //       tag: TAG.RED_RIGHT,
-    //       group: '1'
-    //     },
-    //     {
-    //       pose: new Pose(0, 0, -1, DIR.SOUTH),
-    //       tag: TAG.RED_LEFT,
-    //       group: '2'
-    //     }
-    //   ]
+    //   outputs: []
     // },
     // {
     //   keys: [1, 2, 5], // QA //
@@ -417,26 +345,15 @@ const data = {
     //     {
     //       pose: new Pose(0, 0, 0, DIR.WEST),
     //       tag: TAG.RED_RIGHT,
-    //       group: '1'
+    //       output: true
     //     },
     //     {
     //       pose: new Pose(1, 0, 1, DIR.SOUTH),
     //       tag: TAG.RED_LEFT,
-    //       group: '2'
+    //       output: true
     //     }
     //   ],
-    //   outputs: [
-    //     {
-    //       pose: new Pose(-1, 0, 0, DIR.EAST),
-    //       tag: TAG.RED_RIGHT,
-    //       group: '1'
-    //     },
-    //     {
-    //       pose: new Pose(1, 0, 2, DIR.NORTH),
-    //       tag: TAG.RED_LEFT,
-    //       group: '2'
-    //     }
-    //   ]
+    //   outputs: []
     // },
     {
       keys: [1, 2, 6],
@@ -446,26 +363,15 @@ const data = {
         {
           pose: new Pose(0, 0, 0, DIR.NORTH),
           tag: TAG.RED_RIGHT,
-          group: '1'
+          output: true
         },
         {
           pose: new Pose(1, 1, 1, DIR.EAST),
           tag: TAG.RED_LEFT,
-          group: '2'
+          output: true
         }
       ],
-      outputs: [
-        {
-          pose: new Pose(2, 1, 1, DIR.WEST),
-          tag: TAG.RED_RIGHT,
-          group: '1'
-        },
-        {
-          pose: new Pose(0, 0, -1, DIR.SOUTH),
-          tag: TAG.RED_LEFT,
-          group: '2'
-        }
-      ]
+      outputs: []
     },
     {
       keys: [1, 2, 7],
@@ -475,26 +381,15 @@ const data = {
         {
           pose: new Pose(1, 0, 0, DIR.NORTH),
           tag: TAG.RED_LEFT,
-          group: '1'
+          output: true
         },
         {
           pose: new Pose(0, 1, 1, DIR.WEST),
           tag: TAG.RED_RIGHT,
-          group: '2'
+          output: true
         }
       ],
-      outputs: [
-        {
-          pose: new Pose(-1, 1, 1, DIR.EAST),
-          tag: TAG.RED_LEFT,
-          group: '1'
-        },
-        {
-          pose: new Pose(1, 0, -1, DIR.SOUTH),
-          tag: TAG.RED_RIGHT,
-          group: '2'
-        }
-      ]
+      outputs: []
     }
     // {
     //   keys: [1, 2, 8], // WIP //
@@ -504,26 +399,15 @@ const data = {
     //     {
     //       pose: new Pose(0, 0, 0, DIR.WEST),
     //       tag: TAG.RED_RIGHT,
-    //       group: '1'
+    //       output: true
     //     },
     //     {
     //       pose: new Pose(1, 1, 1, DIR.SOUTH),
     //       tag: TAG.RED_LEFT,
-    //       group: '2'
+    //       output: true
     //     }
     //   ],
-    //   outputs: [
-    //     {
-    //       pose: new Pose(-1, 0, 0, DIR.EAST),
-    //       tag: TAG.RED_RIGHT,
-    //       group: '1'
-    //     },
-    //     {
-    //       pose: new Pose(1, 1, 2, DIR.NORTH),
-    //       tag: TAG.RED_LEFT,
-    //       group: '2'
-    //     }
-    //   ]
+    //   outputs: []
     // },
     // {
     //   keys: [1, 2, 9], // WIP //
@@ -533,32 +417,38 @@ const data = {
     //     {
     //       pose: new Pose(1, 1, 0, DIR.NORTH),
     //       tag: TAG.RED_LEFT,
-    //       group: '1'
+    //       output: true
     //     },
     //     {
     //       pose: new Pose(0, 0, 1, DIR.WEST),
     //       tag: TAG.RED_RIGHT,
-    //       group: '2'
+    //       output: true
     //     }
     //   ],
-    //   outputs: [
-    //     {
-    //       pose: new Pose(-1, 0, 1, DIR.EAST),
-    //       tag: TAG.RED_LEFT,
-    //       group: '1'
-    //     },
-    //     {
-    //       pose: new Pose(1, 1, -1, DIR.SOUTH),
-    //       tag: TAG.RED_RIGHT,
-    //       group: '2'
-    //     }
-    //   ]
+    //   outputs: []
     // }
   ]
 };
 
 _.each(data.blocks, block => {
   block.id = block.keys.join(',');
+
+  // generate official outputs automatically
+  const official_inputs = _.filter(block.inputs, { output: true });
+  if (official_inputs.length === 2) {
+    official_inputs[0].group = 1;
+    official_inputs[1].group = 2;
+    block.outputs.push({
+      pose: official_inputs[0].pose.add(new Pose(0, 0, -1, DIR.SOUTH)),
+      tag: OFFICIALS_TAGS[official_inputs[0].tag].invert,
+      group: official_inputs[1].group
+    });
+    block.outputs.push({
+      pose: official_inputs[1].pose.add(new Pose(0, 0, -1, DIR.SOUTH)),
+      tag: OFFICIALS_TAGS[official_inputs[1].tag].invert,
+      group: official_inputs[0].group
+    });
+  }
 });
 
 module.exports = { data, DIR, TAG, TYPE, Pose };
