@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "autoit": "^1.1.11",
+    "lodash": "^4.17.21",
+    "lodash.product": "^18.9.19"
+  },
+  "name": "tm2-map-generator",
+  "version": "1.0.0",
+  "main": "main.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schadocalex/tm2-map-generator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/schadocalex/tm2-map-generator/issues"
+  },
+  "homepage": "https://github.com/schadocalex/tm2-map-generator#readme",
+  "description": ""
+}
