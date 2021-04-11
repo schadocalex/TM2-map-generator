@@ -36,12 +36,28 @@ const colorSelector = data => {
   }
 };
 
+const segmentsSelector = data => {
+  switch (data) {
+    case 'free':
+      return 6;
+    case 'red_right':
+      return 12;
+    case 'red_left':
+      return 12;
+    case 'jump':
+      return 25;
+
+    default:
+      return 0xffffff;
+  }
+};
+
 let i = 0;
 
 data.blocks.forEach(bloc => {
   // Inputs
   bloc.inputs.forEach(input => {
-    const geometry = new THREE.ConeGeometry(0.5, 1, 16);
+    const geometry = new THREE.ConeGeometry(0.5, 1, segmentsSelector(input.tag));
     const material = new THREE.MeshBasicMaterial({ color: colorSelector(input.tag), wireframe: true });
     const cone = new THREE.Mesh(geometry, material);
     geometry.rotateX(-Math.PI / 2);
@@ -52,7 +68,7 @@ data.blocks.forEach(bloc => {
 
   // Outputs
   bloc.outputs.forEach(input => {
-    const geometry = new THREE.ConeGeometry(0.5, 1, 16);
+    const geometry = new THREE.ConeGeometry(0.5, 1, segmentsSelector(input.tag));
     const material = new THREE.MeshBasicMaterial({ color: colorSelector(input.tag), wireframe: true });
     const cone = new THREE.Mesh(geometry, material);
     geometry.rotateX(-Math.PI / 2);

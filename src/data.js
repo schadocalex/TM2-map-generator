@@ -442,13 +442,11 @@ const data = {
         },
         {
           pose: new Pose(1, 1, 1, DIR.EAST),
-          tag: TAG.JUMP,
-          output: false
+          tag: TAG.JUMP
         },
         {
           pose: new Pose(0, 0, 0, DIR.NORTH),
-          tag: TAG.JUMP,
-          output: false
+          tag: TAG.JUMP
         }
       ],
       outputs: []
@@ -470,13 +468,11 @@ const data = {
         },
         {
           pose: new Pose(1, 1, 0, DIR.EAST),
-          tag: TAG.JUMP,
-          output: false
+          tag: TAG.JUMP
         },
         {
           pose: new Pose(0, 0, 1, DIR.SOUTH),
-          tag: TAG.JUMP,
-          output: false
+          tag: TAG.JUMP
         }
       ],
       outputs: []
@@ -606,61 +602,61 @@ const data = {
         }
       ],
       outputs: []
+    },
+    {
+      keys: [1, 4, '010'],
+      type: TYPE.ROAD,
+      size: new Pose(1, 2, 2),
+      inputs: [
+        {
+          pose: new Pose(0, 1, 1, DIR.SOUTH),
+          tag: TAG.RED_RIGHT,
+          output: true
+        },
+        {
+          pose: new Pose(0, 0, 0, DIR.NORTH),
+          tag: TAG.RED_LEFT,
+          output: true
+        }
+      ],
+      outputs: []
+    },
+    {
+      keys: [1, 4, '011'],
+      type: TYPE.ROAD,
+      size: new Pose(1, 2, 2),
+      inputs: [
+        {
+          pose: new Pose(0, 1, 1, DIR.SOUTH),
+          tag: TAG.RED_LEFT,
+          output: true
+        },
+        {
+          pose: new Pose(0, 0, 0, DIR.NORTH),
+          tag: TAG.RED_RIGHT,
+          output: true
+        }
+      ],
+      outputs: []
+    },
+    {
+      keys: [1, 4, '012'],
+      type: TYPE.ROAD,
+      size: new Pose(1, 2, 2),
+      inputs: [
+        {
+          pose: new Pose(0, 1, 1, DIR.SOUTH),
+          tag: TAG.RED_RIGHT,
+          output: true
+        },
+        {
+          pose: new Pose(0, 0, 0, DIR.NORTH),
+          tag: TAG.RED_LEFT,
+          output: true
+        }
+      ],
+      outputs: []
     }
-    // {
-    //   keys: [1, 4, 010],
-    //   type: TYPE.ROAD,
-    //   size: new Pose(1, 2, 2),
-    //   inputs: [
-    //     {
-    //       pose: new Pose(0, 1, 1, DIR.SOUTH),
-    //       tag: TAG.RED_RIGHT,
-    //       output: true
-    //     },
-    //     {
-    //       pose: new Pose(0, 0, 0, DIR.NORTH),
-    //       tag: TAG.RED_LEFT,
-    //       output: true
-    //     }
-    //   ],
-    //   outputs: []
-    // },
-    // {
-    //   keys: [1, 4, 011],
-    //   type: TYPE.ROAD,
-    //   size: new Pose(1, 2, 2),
-    //   inputs: [
-    //     {
-    //       pose: new Pose(0, 1, 1, DIR.SOUTH),
-    //       tag: TAG.RED_LEFT,
-    //       output: true
-    //     },
-    //     {
-    //       pose: new Pose(0, 0, 0, DIR.NORTH),
-    //       tag: TAG.RED_RIGHT,
-    //       output: true
-    //     }
-    //   ],
-    //   outputs: []
-    // },
-    // {
-    //   keys: [1, 4, 012],
-    //   type: TYPE.ROAD,
-    //   size: new Pose(1, 2, 2),
-    //   inputs: [
-    //     {
-    //       pose: new Pose(0, 1, 1, DIR.SOUTH),
-    //       tag: TAG.RED_RIGHT,
-    //       output: true
-    //     },
-    //     {
-    //       pose: new Pose(0, 0, 0, DIR.NORTH),
-    //       tag: TAG.RED_LEFT,
-    //       output: true
-    //     }
-    //   ],
-    //   outputs: []
-    // }
   ]
 };
 
