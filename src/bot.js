@@ -4,23 +4,23 @@ const autoit = require('autoit');
 const { DIR } = require('./data');
 const { gen_map } = require('./gen_map');
 
-let lastBlocPose = { x: 0, y: 0, z: 0, dir: DIR.NORTH }; // Default bloc pose
+let lastBlockPose = { x: 0, y: 0, z: 0, dir: DIR.NORTH }; // Default block pose
 
-const getBlocOrientationStr = blocDir => {
-  return '{NUMPADDIV}' + '{RCTRL}'.repeat(blocDir);
+const getBlockOrientationStr = blockDir => {
+  return '{NUMPADDIV}' + '{RCTRL}'.repeat(blockDir);
 };
 
-const getBlocCoordStr = blocPose => {
+const getBlockCoordStr = blockPose => {
   const x = () => {
-    const diff = blocPose.x - lastBlocPose.x;
+    const diff = blockPose.x - lastBlockPose.x;
     return (diff >= 0 ? '{LEFT}' : '{RIGHT}').repeat(Math.abs(diff));
   };
   const y = () => {
-    const diff = blocPose.y - lastBlocPose.y;
+    const diff = blockPose.y - lastBlockPose.y;
     return (diff >= 0 ? '{PGUP}' : '{PGDN}').repeat(Math.abs(diff));
   };
   const z = () => {
-    const diff = blocPose.z - lastBlocPose.z;
+    const diff = blockPose.z - lastBlockPose.z;
     return (diff >= 0 ? '{UP}' : '{DOWN}').repeat(Math.abs(diff));
   };
 
@@ -51,21 +51,21 @@ const startBot = opt => {
   autoit.Send('{F1}{F2}{F2}²²211{NUMPADDIV}');
   autoit.Send('{DOWN}{RIGHT}'.repeat(32));
 
-  // Set editor mode bloc
+  // Set editor mode block
   map.forEach(map => {
-    // Reset bloc select
+    // Reset block select
     autoit.Send('²²211');
-    // Set bloc orientation
-    autoit.Send(`${getBlocOrientationStr(map.pose.dir)}`);
-    // Set bloc pose
-    autoit.Send(`${getBlocCoordStr(map.pose)}`);
-    // Select bloc
+    // Set block orientation
+    autoit.Send(`${getBlockOrientationStr(map.pose.dir)}`);
+    // Set block pose
+    autoit.Send(`${getBlockCoordStr(map.pose)}`);
+    // Select block
     autoit.Send('²²' + map.block.keys.join(''));
 
     autoit.Send('{SPACE}');
 
-    // Store last bloc pose
-    lastBlocPose = map.pose;
+    // Store last block pose
+    lastBlockPose = map.pose;
   });
 };
 

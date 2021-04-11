@@ -1,0 +1,10 @@
+{
+  "keys": [1, 3, 6],
+  "type": "finish",
+  "size": { "x": 1, "y": 1, "z": 1, "dir": 0 },
+  "inputs": [
+    { "pose": { "x": 0, "y": 0, "z": 0, "dir": 0 }, "tag": "red_left" },
+    { "pose": { "x": 0, "y": 0, "z": 0, "dir": 0 }, "tag": "jump" }
+  ],
+  "outputs": []
+}

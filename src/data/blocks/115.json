@@ -1,0 +1,20 @@
+{
+  "keys": [1, 1, 5],
+  "type": "road",
+  "size": { "x": 1, "y": 1, "z": 1, "dir": 0 },
+  "inputs": [
+    { "pose": { "x": 0, "y": 0, "z": 0, "dir": 1 }, "tag": "red_left", "output": true },
+    { "pose": { "x": 0, "y": 0, "z": 0, "dir": 3 }, "tag": "red_right", "output": true },
+    { "pose": { "x": 0, "y": 0, "z": 0, "dir": 0 }, "tag": "jump" }
+  ],
+  "outputs": [
+    {
+      "pose": { "x": 0, "y": 0, "z": -1, "dir": 2 },
+      "tag": "jump",
+      "collisions": [
+        { "x": 0, "y": 1, "z": 0, "dir": 0 },
+        { "x": 0, "y": 2, "z": 0, "dir": 0 }
+      ]
+    }
+  ]
+}
