@@ -105,7 +105,7 @@ const iterate_over_coords = step => {
 
 const update_collisions = (collisions, step, value = true) => {
   _.each(iterate_over_coords(step), pose => {
-    _.setWith(collisions, [pose.x, pose.y, pose.z], value ? step.block.id : false, Object);
+    _.setWith(collisions, [pose.x, pose.y, pose.z], value, Object);
   });
 };
 

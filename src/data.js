@@ -661,11 +661,6 @@ const data = {
 };
 
 _.each(data.blocks, block => {
-  // generate ids
-  block.id = block.keys.join('.');
-  _.each(block.inputs, (input, i) => (input.id = block.id + ':i' + i));
-  _.each(block.outputs, (output, i) => (output.id = block.id + ':o' + i));
-
   // generate official outputs automatically
   const official_inputs = _.filter(block.inputs, { output: true });
   if (official_inputs.length === 2) {
@@ -682,6 +677,11 @@ _.each(data.blocks, block => {
       group: official_inputs[0].group
     });
   }
+
+  // generate ids
+  block.id = block.keys.join('.');
+  _.each(block.inputs, (input, i) => (input.id = block.id + ':i' + i));
+  _.each(block.outputs, (output, i) => (output.id = block.id + ':o' + i));
 });
 
 module.exports = { data, DIR, TAG, OFFICIALS_TAGS, TYPE, Pose };
