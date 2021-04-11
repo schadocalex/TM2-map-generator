@@ -1,10 +1,11 @@
 require('lodash.product');
 const _ = require('lodash');
 
-const { data, DIR, TAG, TYPE, Pose } = require('./data');
+const { data, DIR, TAG, OFFICIALS_TAGS, TYPE, Pose } = require('./data');
 
 const starts = _.filter(data.blocks, { type: TYPE.START });
 const roads = _.filter(data.blocks, { type: TYPE.ROAD });
+const checkpoints = _.filter(data.blocks, { type: TYPE.CHECKPOINT });
 const finishes = _.filter(data.blocks, { type: TYPE.FINISH });
 
 const rand = array => array[_.random(array.length - 1)];
@@ -18,37 +19,38 @@ const match_poses = (p1, p2) => {
 };
 
 const getCandidate = (last, blocks, collisions) => {
-  const output = rand(
-    _.filter(last.block.outputs, output => !last.input.group || !output.group || output.group === last.input.group)
-  );
-  const next_pose = last.pose.add(output.pose);
-
   const candidates = [];
 
-  _.each(blocks, block => {
-    _.each(block.inputs, input => {
-      if (output.tag !== TAG.FREE && input.tag !== output.tag) {
-        return;
-      }
-      const new_pose = match_poses(next_pose, input.pose);
-      const candidate = {
-        pose: new_pose,
-        block,
-        input
-      };
-      if (collisions_safe(collisions, candidate)) {
-        candidates.push(candidate);
-      }
+  const outputs = _.filter(
+    last.block.outputs,
+    output => !last.input.group || !output.group || output.group === last.input.group
+  );
+  _.each(outputs, output => {
+    const next_pose = last.pose.add(output.pose);
+    _.each(blocks, block => {
+      _.each(block.inputs, input => {
+        if (output.tag !== TAG.FREE && input.tag !== output.tag) {
+          return;
+        }
+        const new_pose = match_poses(next_pose, input.pose);
+        const candidate = {
+          pose: new_pose,
+          block,
+          input,
+          hash: output.id + '_' + input.id
+        };
+        if (!last.try_set.has(candidate.hash) && collisions_safe(collisions, candidate)) {
+          candidates.push(candidate);
+        }
+      });
     });
   });
+
   if (candidates.length === 0) {
     return null;
   }
 
-  const candidate = rand(candidates);
-  update_collisions(collisions, candidate);
-
-  return candidate;
+  return rand(candidates);
 };
 
 const correct_poses = path => {
@@ -68,73 +70,120 @@ const correct_poses = path => {
   });
 };
 
-const iterate_over_coords = step => {
-  const size = step.block.size.rot(step.pose.dir);
-  return _.product(_.range(0, size.x), _.range(0, size.y), _.range(0, size.z));
+const iterate_over_coords = (step, add_official_outputs) => {
+  const size = step.block.size;
+  const result = _.map(
+    _.product(_.range(0, size.x), _.range(0, size.y), _.range(0, size.z)),
+    ([x, y, z]) => new Pose(x, y, z)
+  );
+
+  // if (add_official_outputs) {
+  //   _.each(step.block.outputs, output => {
+  //     if (OFFICIALS_TAGS[output.tag]) {
+  //       result.push(output.pose);
+  //     }
+  //   });
+  // }
+
+  return _.map(result, pose => step.pose.add(pose));
 };
 
 const update_collisions = (collisions, step, value = true) => {
-  _.each(iterate_over_coords(step), ([x, y, z]) => {
-    _.setWith(collisions, [step.pose.x + x, step.pose.y + y, step.pose.z + z], value, Object);
+  _.each(iterate_over_coords(step, false), pose => {
+    _.setWith(collisions, [pose.x, pose.y, pose.z], value, Object);
   });
 };
 
 const collisions_safe = (collisions, step) => {
-  return !_.some(iterate_over_coords(step), ([px, py, pz]) => {
-    const [x, y, z] = [step.pose.x + px, step.pose.y + py, step.pose.z + pz];
-    if (x < 0 || y < 0 || z < 0 || x > 31 || y > 24 || z > 31) {
+  return !_.some(iterate_over_coords(step, true), pose => {
+    if (pose.x < 0 || pose.y < 0 || pose.z < 0 || pose.x > 31 || pose.y > 24 || pose.z > 31) {
       return true;
     }
-    if (_.get(collisions, [x, y, z], false)) {
+    if (_.get(collisions, [pose.x, pose.y, pose.z], false)) {
       return true;
     }
   });
 };
 
-const gen_map = ({ blocks_between_checkpoints, start_pos_x, start_pos_y, start_pos_z }) => {
+const gen_map = params => {
+  // generate block types order in path
+  const path_block_choice = [starts];
+  const nb_checkpoints = _.random(...params.nb_checkpoints);
+  _.each(_.range(nb_checkpoints + 1), i => {
+    _.each(_.range(_.random(...params.blocks_between_checkpoints)), () => path_block_choice.push(roads));
+    if (i < nb_checkpoints) {
+      path_block_choice.push(checkpoints);
+    }
+  });
+  path_block_choice.push(finishes);
+  console.log(path_block_choice.length + ' blocs dans la map');
+
   const collisions = {};
 
   const path = [];
-  const blocs_count = _.random(...blocks_between_checkpoints);
 
-  // starts bloc
+  // start bloc
   path.push({
-    pose: new Pose(_.random(...start_pos_x), _.random(...start_pos_y), _.random(...start_pos_z), _.random(0, 3)),
-    block: rand(starts),
+    pose: new Pose(
+      _.random(...params.start_pos_x),
+      _.random(...params.start_pos_y),
+      _.random(...params.start_pos_z),
+      _.random(0, 3)
+    ),
+    block: rand(path_block_choice[0]),
     input: {
       pose: new Pose(0, 0, 0)
-    }
+    },
+    hash: 'start',
+    try_set: new Set()
   });
   update_collisions(collisions, _.last(path));
 
+  const pop_path = (collisions, path) => {
+    if (path.length > 1) {
+      update_collisions(collisions, path.pop(), false);
+      return true;
+    } else {
+      console.error('Impossible de générer une map de cette longueur. Réessayez ou diminuez le nombre de blocs.');
+      return false;
+    }
+  };
+
   // loop with blocs_count
-  let cpt = -1;
-  while (path.length < blocs_count) {
-    let j = -1;
-    while (j++ < 1000) {
-      const candidate = getCandidate(path[path.length - 1], roads, collisions);
-      if (candidate) {
-        path.push(candidate);
+  const TRY_MAX_PER_STEP = 10;
+  let cpt = 0;
+  while (path.length < path_block_choice.length) {
+    if (path.length > cpt) {
+      cpt = path.length;
+      console.log(cpt);
+    }
+
+    const last = _.last(path);
+    if (last.try_set.size >= TRY_MAX_PER_STEP) {
+      if (pop_path(collisions, path)) {
+        continue;
+      } else {
         break;
-      } else if (path.length > 1) {
-        update_collisions(collisions, path.pop(), false);
       }
     }
-    if (cpt++ > 10000) {
-      break;
-    }
-  }
 
-  while (true) {
-    const candidate = getCandidate(path[path.length - 1], finishes, collisions);
+    const candidate = getCandidate(last, path_block_choice[path.length], collisions);
     if (candidate) {
+      candidate.nb_try = 0;
+      candidate.try_set = new Set();
+      last.try_set.add(candidate.hash);
       path.push(candidate);
-      break;
-    } else if (path.length > 2) {
-      update_collisions(collisions, path.pop(), false);
+      update_collisions(collisions, candidate, true);
+    } else {
+      if (pop_path(collisions, path)) {
+        continue;
+      } else {
+        break;
+      }
     }
   }
 
+  // Correct poses in path to match editor pose (not the same rotation)
   correct_poses(path);
 
   return path;
@@ -163,7 +212,8 @@ const gen_map = ({ blocks_between_checkpoints, start_pos_x, start_pos_y, start_p
 // );
 
 // const map = gen_map({
-//   blocks_between_checkpoints: [100, 100],
+//   blocks_between_checkpoints: [2, 4],
+//   nb_checkpoints: [3, 4],
 //   start_pos_x: [6, 10],
 //   start_pos_y: [0, 10],
 //   start_pos_z: [6, 10]

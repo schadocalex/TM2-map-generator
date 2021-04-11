@@ -202,6 +202,40 @@ const data = {
       outputs: []
     },
     {
+      keys: [1, 3, 1],
+      type: TYPE.CHECKPOINT,
+      size: new Pose(1, 1, 1),
+      inputs: [
+        {
+          pose: new Pose(0, 0, 0, DIR.NORTH),
+          tag: TAG.RED_RIGHT
+        }
+      ],
+      outputs: [
+        {
+          pose: new Pose(0, 0, 1, DIR.NORTH),
+          tag: TAG.RED_RIGHT
+        }
+      ]
+    },
+    {
+      keys: [1, 3, 2],
+      type: TYPE.CHECKPOINT,
+      size: new Pose(1, 1, 1),
+      inputs: [
+        {
+          pose: new Pose(0, 0, 0, DIR.NORTH),
+          tag: TAG.RED_LEFT
+        }
+      ],
+      outputs: [
+        {
+          pose: new Pose(0, 0, 1, DIR.NORTH),
+          tag: TAG.RED_LEFT
+        }
+      ]
+    },
+    {
       keys: [1, 3, 3],
       type: TYPE.START,
       size: new Pose(1, 1, 1),
@@ -631,7 +665,10 @@ const data = {
 };
 
 _.each(data.blocks, block => {
-  block.id = block.keys.join(',');
+  // generate ids
+  block.id = block.keys.join('.');
+  _.each(block.inputs, (input, i) => (input.id = block.id + ':i' + i));
+  _.each(block.outputs, (output, i) => (output.id = block.id + ':o' + i));
 
   // generate official outputs automatically
   const official_inputs = _.filter(block.inputs, { output: true });
@@ -651,4 +688,4 @@ _.each(data.blocks, block => {
   }
 });
 
-module.exports = { data, DIR, TAG, TYPE, Pose };
+module.exports = { data, DIR, TAG, OFFICIALS_TAGS, TYPE, Pose };
