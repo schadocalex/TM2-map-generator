@@ -2,13 +2,15 @@
   "dependencies": {
     "autoit": "^1.1.11",
     "lodash": "^4.17.21",
-    "lodash.product": "^18.9.19"
+    "lodash.product": "^18.9.19",
+    "minimist": "^1.2.5"
   },
   "name": "tm2-map-generator",
   "version": "1.0.0",
   "main": "main.js",
   "devDependencies": {},
   "scripts": {
+    "start": "node main.js --min 12 --max 24",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
