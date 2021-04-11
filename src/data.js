@@ -442,13 +442,11 @@ const data = {
         },
         {
           pose: new Pose(1, 1, 1, DIR.EAST),
-          tag: TAG.JUMP,
-          output: false
+          tag: TAG.JUMP
         },
         {
           pose: new Pose(0, 0, 0, DIR.NORTH),
-          tag: TAG.JUMP,
-          output: false
+          tag: TAG.JUMP
         }
       ],
       outputs: []
@@ -470,13 +468,11 @@ const data = {
         },
         {
           pose: new Pose(1, 1, 0, DIR.EAST),
-          tag: TAG.JUMP,
-          output: false
+          tag: TAG.JUMP
         },
         {
           pose: new Pose(0, 0, 1, DIR.SOUTH),
-          tag: TAG.JUMP,
-          output: false
+          tag: TAG.JUMP
         }
       ],
       outputs: []
