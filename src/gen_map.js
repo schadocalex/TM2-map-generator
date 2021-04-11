@@ -29,9 +29,11 @@ const getCandidate = (last, blocks, collisions) => {
     const next_pose = last.pose.add(output.pose);
     _.each(blocks, block => {
       _.each(block.inputs, input => {
+        // If the tag doesn't match, not valid
         if (output.tag !== TAG.FREE && input.tag !== output.tag) {
           return;
         }
+
         const new_pose = match_poses(next_pose, input.pose);
         const candidate = {
           pose: new_pose,
@@ -39,9 +41,33 @@ const getCandidate = (last, blocks, collisions) => {
           input,
           hash: output.id + '_' + input.id
         };
-        if (!last.try_set.has(candidate.hash) && collisions_safe(collisions, candidate)) {
-          candidates.push(candidate);
+
+        // If it has already been used, not valid
+        if (last.try_set.has(candidate.hash)) {
+          return;
         }
+
+        // If the official output collide, not valid
+        // too complicated with fallback
+        // for (const candidate_output in block.outputs) {
+        //   if (!OFFICIALS_TAGS[candidate_output.tag]) {
+        //     continue;
+        //   }
+
+        //   const candidate_output_absolute_pose = new_pose.add(candidate_output.pose);
+        //   const block_id = collision_at_pose(collisions, candidate_output_absolute_pose);
+        //   if (block_id !== last.block.id) {
+        //     return;
+        //   }
+        // }
+
+        // If the block collides, not valid
+        if (!collisions_safe(collisions, candidate)) {
+          return;
+        }
+
+        // It has passed all the validation. Add it to valid candidates list
+        candidates.push(candidate);
       });
     });
   });
@@ -70,32 +96,21 @@ const correct_poses = path => {
   });
 };
 
-const iterate_over_coords = (step, add_official_outputs) => {
+const iterate_over_coords = step => {
   const size = step.block.size;
-  const result = _.map(
-    _.product(_.range(0, size.x), _.range(0, size.y), _.range(0, size.z)),
-    ([x, y, z]) => new Pose(x, y, z)
+  return _.map(_.product(_.range(0, size.x), _.range(0, size.y), _.range(0, size.z)), ([x, y, z]) =>
+    step.pose.add(new Pose(x, y, z))
   );
-
-  // if (add_official_outputs) {
-  //   _.each(step.block.outputs, output => {
-  //     if (OFFICIALS_TAGS[output.tag]) {
-  //       result.push(output.pose);
-  //     }
-  //   });
-  // }
-
-  return _.map(result, pose => step.pose.add(pose));
 };
 
 const update_collisions = (collisions, step, value = true) => {
-  _.each(iterate_over_coords(step, false), pose => {
-    _.setWith(collisions, [pose.x, pose.y, pose.z], value, Object);
+  _.each(iterate_over_coords(step), pose => {
+    _.setWith(collisions, [pose.x, pose.y, pose.z], value ? step.block.id : false, Object);
   });
 };
 
 const collisions_safe = (collisions, step) => {
-  return !_.some(iterate_over_coords(step, true), pose => {
+  return !_.some(iterate_over_coords(step), pose => {
     if (pose.x < 0 || pose.y < 0 || pose.z < 0 || pose.x > 31 || pose.y > 24 || pose.z > 31) {
       return true;
     }
@@ -104,6 +119,10 @@ const collisions_safe = (collisions, step) => {
     }
   });
 };
+
+// const collision_at_pose = (collisions, pose) => {
+//   return _.get(collisions, [pose.x, pose.y, pose.z], false);
+// };
 
 const gen_map = params => {
   // generate block types order in path
@@ -211,13 +230,13 @@ const gen_map = params => {
 //   })
 // );
 
-// const map = gen_map({
-//   blocks_between_checkpoints: [2, 4],
-//   nb_checkpoints: [3, 4],
-//   start_pos_x: [6, 10],
-//   start_pos_y: [0, 10],
-//   start_pos_z: [6, 10]
-// });
-// console.log(map, map.length);
+const map = gen_map({
+  blocks_between_checkpoints: [2, 4],
+  nb_checkpoints: [3, 4],
+  start_pos_x: [6, 10],
+  start_pos_y: [0, 10],
+  start_pos_z: [6, 10]
+});
+console.log(map, map.length);
 
 module.exports = { gen_map, DIR };
