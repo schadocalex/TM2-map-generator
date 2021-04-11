@@ -111,7 +111,8 @@ const update_collisions = (collisions, step, value = true) => {
 
 const collisions_safe = (collisions, step) => {
   return !_.some(iterate_over_coords(step), pose => {
-    if (pose.x < 0 || pose.y < 0 || pose.z < 0 || pose.x > 31 || pose.y > 24 || pose.z > 31) {
+    // 1 de marge sur x et z pour éviter les problèmes de collisions avec les sorties de blocks
+    if (pose.x < 1 || pose.y < 0 || pose.z < 1 || pose.x > 30 || pose.y > 24 || pose.z > 30) {
       return true;
     }
     if (_.get(collisions, [pose.x, pose.y, pose.z], false)) {
