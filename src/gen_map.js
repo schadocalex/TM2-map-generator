@@ -109,9 +109,9 @@ const gen_map = params => {
   // generate block types order in path
   const path_block_choice = [starts];
   const nb_checkpoints = _.random(...params.nb_checkpoints);
-  _.each(_.range(nb_checkpoints), i => {
+  _.each(_.range(nb_checkpoints + 1), i => {
     _.each(_.range(_.random(...params.blocks_between_checkpoints)), () => path_block_choice.push(roads));
-    if (i + 1 < nb_checkpoints) {
+    if (i < nb_checkpoints) {
       path_block_choice.push(checkpoints);
     }
   });
