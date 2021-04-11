@@ -405,6 +405,11 @@ const data = {
           pose: new Pose(1, 1, 1, DIR.SOUTH),
           tag: TAG.RED_LEFT,
           output: true
+        },
+        {
+          pose: new Pose(1, 1, 1, DIR.EAST),
+          tag: TAG.JUMP,
+          output: false ///
         }
       ],
       outputs: []
@@ -416,13 +421,18 @@ const data = {
       inputs: [
         {
           pose: new Pose(1, 1, 0, DIR.NORTH),
-          tag: TAG.RED_LEFT,
+          tag: TAG.RED_RIGHT,
           output: true
         },
         {
           pose: new Pose(0, 0, 1, DIR.WEST),
-          tag: TAG.RED_RIGHT,
+          tag: TAG.RED_LEFT,
           output: true
+        },
+        {
+          pose: new Pose(1, 1, 0, DIR.EAST),
+          tag: TAG.JUMP,
+          output: false
         }
       ],
       outputs: []
