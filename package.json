@@ -10,7 +10,7 @@
   "main": "main.js",
   "devDependencies": {},
   "scripts": {
-    "start": "node main.js --min 100 --max 200",
+    "start": "node main.js --min 50 --max 100",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
