@@ -20,8 +20,8 @@ const dirToRad = dir => {
   return dir * (-Math.PI / 2);
 };
 
-const colorSelector = data => {
-  switch (data) {
+const colorSelector = block_tag => {
+  switch (block_tag) {
     case 'free':
       return 0x1bb500;
     case 'red_right':
@@ -36,8 +36,8 @@ const colorSelector = data => {
   }
 };
 
-const segmentsSelector = data => {
-  switch (data) {
+const segmentsSelector = block_tag => {
+  switch (block_tag) {
     case 'free':
       return 6;
     case 'red_right':
@@ -54,9 +54,9 @@ const segmentsSelector = data => {
 
 let i = 0;
 
-data.blocks.forEach(bloc => {
+data.blocks.forEach(block => {
   // Inputs
-  bloc.inputs.forEach(input => {
+  block.inputs.forEach(input => {
     const geometry = new THREE.ConeGeometry(0.5, 1, segmentsSelector(input.tag));
     const material = new THREE.MeshBasicMaterial({ color: colorSelector(input.tag), wireframe: true });
     const cone = new THREE.Mesh(geometry, material);
@@ -67,7 +67,7 @@ data.blocks.forEach(bloc => {
   });
 
   // Outputs
-  bloc.outputs.forEach(input => {
+  block.outputs.forEach(input => {
     const geometry = new THREE.ConeGeometry(0.5, 1, segmentsSelector(input.tag));
     const material = new THREE.MeshBasicMaterial({ color: colorSelector(input.tag), wireframe: true });
     const cone = new THREE.Mesh(geometry, material);
