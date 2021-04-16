@@ -10,6 +10,25 @@ const finishes = _.filter(data.blocks, { type: TYPE.FINISH });
 
 const rand = array => array[_.random(array.length - 1)];
 
+const rand_with_weight = (array, prop) => {
+  const sum_p = _.sumBy(array, prop);
+  if (sum_p <= 0) {
+    throw new RangeError('sum of ' + prop + ' in data must be positive');
+  }
+
+  const number = _.random(sum_p, true);
+  let accumulator = 0.0;
+  return _.find(array, el => {
+    const p = el[prop];
+    if (p > 0) {
+      accumulator += p;
+      return accumulator >= number;
+    } else if (p < 0) {
+      throw new RangeError(prop + ' in data must be positive');
+    }
+  });
+};
+
 const match_poses = (p1, p2) => {
   const rot_dir = 4 - p2.dir;
   const p3 = p1.add(p2.rot(rot_dir).neg_pos());
@@ -39,7 +58,8 @@ const getCandidate = (last, blocks, collisions) => {
           pose: new_pose,
           block,
           input,
-          hash: output.id + '_' + input.id
+          hash: output.id + '_' + input.id,
+          p: _.get(output, 'p', 1) * _.get(block, 'p', 1) * _.get(input, 'p', 1)
         };
 
         // If it has already been used, not valid
@@ -76,7 +96,7 @@ const getCandidate = (last, blocks, collisions) => {
     return null;
   }
 
-  return rand(candidates);
+  return rand_with_weight(candidates, 'p');
 };
 
 const correct_poses = path => {
@@ -231,13 +251,15 @@ const gen_map = params => {
 //   })
 // );
 
-const map = gen_map({
-  blocks_between_checkpoints: [2, 4],
-  nb_checkpoints: [3, 4],
-  start_pos_x: [6, 10],
-  start_pos_y: [0, 10],
-  start_pos_z: [6, 10]
-});
-console.log(map, map.length);
+// _.each(_.range(20), () => console.log(rand_with_weight([{ p: 1 }, { p: 10 }, { p: 2 }], 'p')));
+
+// const map = gen_map({
+//   blocks_between_checkpoints: [2, 4],
+//   nb_checkpoints: [3, 4],
+//   start_pos_x: [6, 10],
+//   start_pos_y: [0, 10],
+//   start_pos_z: [6, 10]
+// });
+// console.log(map, map.length);
 
 module.exports = { gen_map, DIR };
