@@ -1,5 +1,4 @@
 const _ = require('lodash');
-const fs = require('fs');
 const { blocks_data } = require('./data/blocks_data');
 
 const DIR = {
@@ -13,11 +12,13 @@ const TAG = {
   FREE: 'free',
   RED_RIGHT: 'red_right',
   RED_LEFT: 'red_left',
-  JUMP: 'jump'
+  JUMP: 'jump',
+  CONCRETE: 'concrete'
 };
 const OFFICIALS_TAGS = {
   [TAG.RED_RIGHT]: { invert: TAG.RED_LEFT },
-  [TAG.RED_LEFT]: { invert: TAG.RED_RIGHT }
+  [TAG.RED_LEFT]: { invert: TAG.RED_RIGHT },
+  [TAG.CONCRETE]: { invert: TAG.CONCRETE }
 };
 
 const TYPE = {
@@ -67,30 +68,31 @@ const data = {
 };
 
 blocks_data.forEach(bloc_data => {
+  const new_data = {};
   // size
-  bloc_data.size = new Pose(bloc_data.size.x, bloc_data.size.y, bloc_data.size.z, bloc_data.size.dir);
+  new_data.size = new Pose(bloc_data.size.x, bloc_data.size.y, bloc_data.size.z, bloc_data.size.dir);
   // inputs
-  const inputsCache = [];
-  bloc_data.inputs.forEach(input => {
-    inputsCache.push({
+  new_data.inputs = bloc_data.inputs.map(input => {
+    return {
       pose: new Pose(input.pose.x, input.pose.y, input.pose.z, input.pose.dir),
       tag: input.tag,
       output: input.output || false
-    });
+    };
   });
-  bloc_data.inputs = inputsCache;
   // outputs
-  const outputsCache = [];
-  bloc_data.outputs.forEach(output => {
-    outputsCache.push({
+  new_data.outputs = bloc_data.outputs.map(output => {
+    return {
       pose: new Pose(output.pose.x, output.pose.y, output.pose.z, output.pose.dir),
       tag: output.tag,
       collisions: output.collisions || []
-    });
+    };
   });
+  // tag and key
+  new_data.tag = bloc_data.tag;
+  new_data.keys = bloc_data.keys;
+  new_data.type = bloc_data.type;
   // TODO: collisions
-  bloc_data.outputs = outputsCache;
-  data.blocks.push(bloc_data);
+  data.blocks.push(new_data);
 });
 
 _.each(data.blocks, block => {
