@@ -20,8 +20,8 @@ const dirToRad = dir => {
   return dir * (-Math.PI / 2);
 };
 
-const colorSelector = data => {
-  switch (data) {
+const colorSelector = block_tag => {
+  switch (block_tag) {
     case 'free':
       return 0x1bb500;
     case 'red_right':
@@ -30,14 +30,16 @@ const colorSelector = data => {
       return 0xff5959;
     case 'jump':
       return 0x0040ff;
+    case 'concrete':
+      return 0x59606e;
 
     default:
       return 0xffffff;
   }
 };
 
-const segmentsSelector = data => {
-  switch (data) {
+const segmentsSelector = block_tag => {
+  switch (block_tag) {
     case 'free':
       return 6;
     case 'red_right':
@@ -46,17 +48,19 @@ const segmentsSelector = data => {
       return 12;
     case 'jump':
       return 25;
+    case 'concrete':
+      return 12;
 
     default:
-      return 0xffffff;
+      return 12;
   }
 };
 
 let i = 0;
 
-data.blocks.forEach(bloc => {
+data.blocks.forEach(block => {
   // Inputs
-  bloc.inputs.forEach(input => {
+  block.inputs.forEach(input => {
     const geometry = new THREE.ConeGeometry(0.5, 1, segmentsSelector(input.tag));
     const material = new THREE.MeshBasicMaterial({ color: colorSelector(input.tag), wireframe: true });
     const cone = new THREE.Mesh(geometry, material);
@@ -67,13 +71,13 @@ data.blocks.forEach(bloc => {
   });
 
   // Outputs
-  bloc.outputs.forEach(input => {
-    const geometry = new THREE.ConeGeometry(0.5, 1, segmentsSelector(input.tag));
-    const material = new THREE.MeshBasicMaterial({ color: colorSelector(input.tag), wireframe: true });
+  block.outputs.forEach(output => {
+    const geometry = new THREE.ConeGeometry(0.5, 1, segmentsSelector(output.tag));
+    const material = new THREE.MeshBasicMaterial({ color: colorSelector(output.tag), wireframe: true });
     const cone = new THREE.Mesh(geometry, material);
     geometry.rotateX(-Math.PI / 2);
-    geometry.rotateY(dirToRad(input.pose.dir));
-    geometry.translate(-input.pose.x + i, input.pose.y, -input.pose.z);
+    geometry.rotateY(dirToRad(output.pose.dir));
+    geometry.translate(-output.pose.x + i, output.pose.y, -output.pose.z);
     scene.add(cone);
   });
 

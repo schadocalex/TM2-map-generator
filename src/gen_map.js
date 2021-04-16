@@ -156,13 +156,13 @@ const gen_map = params => {
     }
   });
   path_block_choice.push(finishes);
-  console.log(path_block_choice.length + ' blocs dans la map');
+  console.log(path_block_choice.length + ' blocks dans la map');
 
   const collisions = {};
 
   const path = [];
 
-  // start bloc
+  // start block
   path.push({
     pose: new Pose(
       _.random(...params.start_pos_x),
@@ -184,12 +184,12 @@ const gen_map = params => {
       update_collisions(collisions, path.pop(), false);
       return true;
     } else {
-      console.error('Impossible de générer une map de cette longueur. Réessayez ou diminuez le nombre de blocs.');
+      console.error('Impossible de générer une map de cette longueur. Réessayez ou diminuez le nombre de blocks.');
       return false;
     }
   };
 
-  // loop with blocs_count
+  // loop with blocks_count
   const TRY_MAX_PER_STEP = 10;
   let cpt = 0;
   while (path.length < path_block_choice.length) {
