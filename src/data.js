@@ -17,8 +17,7 @@ const TAG = {
 };
 const OFFICIALS_TAGS = {
   [TAG.RED_RIGHT]: { invert: TAG.RED_LEFT },
-  [TAG.RED_LEFT]: { invert: TAG.RED_RIGHT },
-  [TAG.CONCRETE]: { invert: TAG.CONCRETE }
+  [TAG.RED_LEFT]: { invert: TAG.RED_RIGHT }
 };
 
 const TYPE = {
